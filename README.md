@@ -14,7 +14,7 @@ Author: Matej Kleman
     *$ sudo docker build -t flaskapp .*
 
 4. Run your app: \
-    *$ sudo docker run -name flaskapp -p 5000:5000 flaskapp*
+    *$ sudo docker run -n flaskapp -p 5000:5000 flaskapp*
 
 ## How to deploy Postgres DB
 1. Install docker: \
