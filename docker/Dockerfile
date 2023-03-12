@@ -8,7 +8,7 @@ ENV FLASK_APP=app/flask_app.py
 
 ENV FLASK_RUN_HOST=0.0.0.0
 
-ENV FLASK_ENV=development
+# ENV FLASK_ENV=development
 
 COPY app/requirements.txt /app/requirements.txt
 
