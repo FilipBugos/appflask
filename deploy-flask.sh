@@ -1,5 +1,5 @@
-apt-get update -y && \
-    apt-get install -y python3-pip && \
+sudo apt-get update -y && \
+    apt-get install -y python3-pip python3-flask && \
     apt install -y libpq-dev
 
 pip3 install -r app/requirements.txt
