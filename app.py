@@ -2,12 +2,16 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = \
-    'postgresql://postgres:postgres@localhost:5432/my_flask_db'
+app.config.from_object('config.config')
+# app.config["SQLALCHEMY_DATABASE_URI"] = \
+#    'postgresql://postgres:postgres@localhost:5432/my_flask_db'
     # If you run postgres in container and app locally
     # 'postgresql://postgres:postgres@localhost:5432/my_flask_db'
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.update(
+    SQLALCHEMY_DATABASE_URI=app.config.get('DATABASE_URI'),
+    SQLALCHEMY_TRACK_MODIFICATIONS=False,
+)
 
 from models import db, Item
 
