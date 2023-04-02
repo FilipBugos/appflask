@@ -27,7 +27,10 @@ with app.app_context():
 
 @app.route('/')
 def main():
-    return render_template('index.html')
+    data = Item.query.all()
+    items = ((item.name, item.shop, item.cost) for item in data)
+    headings = ("Name", "Shop", "Cost")
+    return render_template('index.html', items=items, headings=headings)
 
 @app.route("/add", methods=['POST'])
 def add_item_from_form():
