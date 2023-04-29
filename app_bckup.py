@@ -1,7 +1,10 @@
-from azure.data.tables import TableServiceClient, TableClient
 import os
 from datetime import datetime
-import uuid
+from azure.data.tables import TableServiceClient, TableClient
+
+from flask import Flask, redirect, render_template, request, send_from_directory, url_for
+
+app = Flask(__name__)
 
 # <---------------------------------------------------------------------->
 
@@ -26,42 +29,23 @@ print("Table 'testtable' created.")
 # <---------------------------------------------------------------------->
 
 
-# Insert a new entity into the table
-#entity = {
-#    'PartitionKey': 'my-partition-key',
-#    'RowKey': 'my-row-key',
-#    'data': 'Hello, world!'
-#}
-#table_client.create_entity(entity)
+#app.config.from_object('config.config')
+# app.config["SQLALCHEMY_DATABASE_URI"] = \
+#    'postgresql://postgres:postgres@localhost:5432/my_flask_db'
+    # If you run postgres in container and app locally
+    # 'postgresql://postgres:postgres@localhost:5432/my_flask_db'
 
-# Retrieve an entity by partition key and row key
-#retrieved_entity = table_client.get_entity(partition_key='my-partition-key', row_key='my-row-key')
-#print('entity: ')
-#print(retrieved_entity)
-
-# Update an existing entity
-#updated_entity = {
-#    'PartitionKey': 'my-partition-key',
-#    'RowKey': 'my-row-key',
-#    'data': 'Hello, updated world!'
-#}
-#table_client.update_entity(mode='replace', entity=updated_entity)
-
-# Delete an entity
-#table_client.delete_entity(partition_key='my-partition-key', row_key='my-row-key')
-
-# <----------------------------------------------------------------->
-
-from flask import Flask, redirect, render_template, request, send_from_directory, url_for
-
-app = Flask(__name__)
+#app.config.update(
+#    SQLALCHEMY_DATABASE_URI=app.config.get('DATABASE_URI'),
+#    SQLALCHEMY_TRACK_MODIFICATIONS=False,
+#)
 
 #from models import db, Item
 
 
 @app.route('/')
 def main():
-    data = table_client.list_entities(filter=f"PartitionKey eq '{'my-items'}'")
+    data = table_client.get_entity(partition_key="my_items")
     items = ((item['name'], item['shop'], item['cost']) for item in data)
     headings = ("Name", "Shop", "Cost")
     return render_template('index.html', items=items, headings=headings)
@@ -76,21 +60,21 @@ def add_item_from_form():
 
     entity = {
         'PartitionKey': 'my-items',
-        'RowKey': str(new_uuid),
+        'RowKey': new_uuid,
         'name': name,
         'shop': shop,
         'cost': cost
     }
     table_client.create_entity(entity)
     
-    data = table_client.list_entities(filter=f"PartitionKey eq '{'my-items'}'")
+    data = table_client.get_entity(partition_key="my_items")
     items = ((item['name'], item['shop'], item['cost']) for item in data)
     headings = ("Name", "Shop", "Cost")
     return render_template('index.html', items=items, headings=headings)
 
 @app.route("/items", methods=['GET'])
 def get_items():
-    data = table_client.list_entities(filter=f"PartitionKey eq '{'my-items'}'")
+    data = table_client.get_entity(partition_key="my_items")
     items = ((item['name'], item['shop'], item['cost']) for item in data)
     headings = ("Name", "Shop", "Cost")
     return render_template('index.html', items=items, headings=headings)
