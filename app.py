@@ -3,10 +3,22 @@ import os
 from datetime import datetime
 import uuid
 
+
+from flask import Flask, redirect, render_template, request, send_from_directory, url_for
+
+app = Flask(__name__)
+
+print('app')
+
 # <---------------------------------------------------------------------->
 
+app.config.from_object('config.config')
+
+connection_string = app.config.get('STORAGE_CONNECTION_STRING')
+print(connection_string)
+
 # Replace with your connection string and table name
-connection_string = 'DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;'
+# connection_string = 'DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;'
 table_name = 'myTestTable'
 
 # Create a TableServiceClient instance
@@ -51,10 +63,6 @@ print("Table 'testtable' created.")
 #table_client.delete_entity(partition_key='my-partition-key', row_key='my-row-key')
 
 # <----------------------------------------------------------------->
-
-from flask import Flask, redirect, render_template, request, send_from_directory, url_for
-
-app = Flask(__name__)
 
 #from models import db, Item
 

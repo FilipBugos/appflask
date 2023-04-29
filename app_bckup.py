@@ -6,6 +6,7 @@ from flask import Flask, redirect, render_template, request, send_from_directory
 
 app = Flask(__name__)
 
+print('app_bck')
 # <---------------------------------------------------------------------->
 
 # Replace with your connection string and table name
